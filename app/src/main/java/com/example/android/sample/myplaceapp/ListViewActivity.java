@@ -5,6 +5,7 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,12 +15,24 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
+
+import com.example.android.sample.myplaceapp.location.Place;
+import com.example.android.sample.myplaceapp.location.PlaceRepository;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListViewActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
     private SimpleCursorAdapter adapter;
-    public final static String EXTRA_MYID = "com.example.a30032758.mymemoapp.MYID";
+    public final static String EXTRA_MYID = "com.example.android.sample.myplaceapp.MYID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +42,7 @@ public class ListViewActivity extends AppCompatActivity implements LoaderManager
         Toolbar toolbar = (Toolbar)findViewById(R.id.Toolbar);
         setSupportActionBar(toolbar);
 
-        Intent varintent = getIntent();
+        Intent intent = getIntent();
 
         String[] from = {
                 LogContract.Memos.COL_TITLE,
@@ -104,8 +117,40 @@ public class ListViewActivity extends AppCompatActivity implements LoaderManager
         adapter.swapCursor(data);
     }
 
+//    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+//        mCursor = data;
+//        locationDataLatitude(data);
+//    }
+
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.swapCursor(null);
     }
+
+
+
+/*
+自分で付け足したもの
+ */
+//    // 地図を表示する視点を操作する
+//    private void locationDataLatitude(@NonNull Cursor cursor) {
+//
+//        // カーソルから情報を集めて、Placeのリストにする
+//        List<Place> places = new ArrayList<>();
+//        while (cursor.moveToNext()) {
+//            places.add(PlaceRepository.cursorToPlace(cursor));
+//        }
+//
+//        int size = places.size();
+//        Place place = places.get(size);
+//        double latiTude = place.getLatitude();
+//        TextView textView1 = (TextView)findViewById(R.id.latitudeText);
+//        textView1.setText((int) latiTude);
+//        double longiTude = place.getLongitude();
+//        TextView textView2 = (TextView)findViewById(R.id.longitudeText);
+//        textView2.setText((int) longiTude);
+//
+//    }
+
+
 }

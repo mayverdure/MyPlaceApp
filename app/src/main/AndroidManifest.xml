@@ -5,26 +5,24 @@
     <!-- メモ帳Providerの読み込み権限を宣言する -->
     <permission
         android:name="com.example.android.sample.myplaceapp.place.read"
-        android:protectionLevel="normal"
+        android:description="@string/permission_place_read_description"
         android:label="@string/permission_place_read_label"
-        android:description="@string/permission_place_read_description"/>
+        android:protectionLevel="normal" />
 
     <!-- メモ帳Providerの書き込み権限を宣言する -->
     <permission
         android:name="com.example.android.sample.myplaceapp.place.write"
-        android:protectionLevel="signature"
+        android:description="@string/permission_place_write_description"
         android:label="@string/permission_place_write_label"
-        android:description="@string/permission_place_write_description"/>
+        android:protectionLevel="signature" />
 
     <!-- 作成したパーミッションの使用を宣言する -->
-    <uses-permission android:name="com.example.android.sample.myplaceapp.place.read"/>
-    <uses-permission android:name="com.example.android.sample.myplaceapp.place.write"/>
-
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.example.android.sample.myplaceapp.place.read" />
+    <uses-permission android:name="com.example.android.sample.myplaceapp.place.write" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -35,24 +33,37 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <service android:name=".location.PlaceStoreService" android:exported="false"/>
+        <service
+            android:name=".location.PlaceStoreService"
+            android:exported="false" />
 
         <!-- 位置情報のContentProvider -->
         <provider
-            android:authorities="com.example.android.sample.myplaceapp.place"
             android:name=".location.PlaceProvider"
+            android:authorities="com.example.android.sample.myplaceapp.place"
+            android:exported="false"
             android:readPermission="com.example.android.sample.myplaceapp.place.read"
-            android:writePermission="com.example.android.sample.myplaceapp.place.write"
-            android:exported="false"/>
+            android:writePermission="com.example.android.sample.myplaceapp.place.write" />
 
         <!-- Google Maps Android API用 -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBo-nvqnsQGY1eOlOcGoWjWBz58G2jttKM" />
+
+        <activity android:name=".ListViewActivity" />
+
+        <provider
+            android:name=".LogContentProvider"
+            android:authorities="com.example.android.sample.myplaceapp.LogContentProvider"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity android:name=".LogActivity"></activity>
     </application>
 
 </manifest>

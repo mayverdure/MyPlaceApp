@@ -2,6 +2,7 @@ package com.example.android.sample.myplaceapp.location;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -10,7 +11,9 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.AdapterView;
 
+import com.example.android.sample.myplaceapp.MainActivity;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,6 +23,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -32,7 +36,11 @@ import java.util.Locale;
 /**
  * 地図を表示するフラグメント
  */
-public class LoggedMapFragment extends MapFragment implements OnMapReadyCallback {
+public class LoggedMapFragment extends MapFragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+
+//    public final String EXTRA_LATIT = "com.example.android.sample.myplaceapp.location.LATIT";
+//    public final String EXTRA_LONGIT = "com.example.android.sample.myplaceapp.location.LONGIT";
+
 
     // 位置情報を読み込むローダー
     private static final int PLACE_LOADER = 1;
@@ -51,9 +59,11 @@ public class LoggedMapFragment extends MapFragment implements OnMapReadyCallback
     public static LoggedMapFragment newInstance(String date) {
         LoggedMapFragment fragment = new LoggedMapFragment();
 
+        // データを渡す為のBundleを生成し、渡すデータを内包させる
         Bundle arguments = new Bundle();
         arguments.putString(ARGS_DATE, date);
 
+        // FragmentにsetArgumentsで先ほどのbundleをセットする
         fragment.setArguments(arguments);
 
         return fragment;
@@ -84,6 +94,8 @@ public class LoggedMapFragment extends MapFragment implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
 
+        mGoogleMap.setOnMarkerClickListener(this);
+
         // カメラの操作は、Viewがレイアウトされた後に行う必要がある
         View view = getView();
         if (view != null) {
@@ -95,6 +107,8 @@ public class LoggedMapFragment extends MapFragment implements OnMapReadyCallback
                 }
             });
         }
+
+
     }
 
     private LoaderManager.LoaderCallbacks<Cursor> mCallback
@@ -225,6 +239,7 @@ public class LoggedMapFragment extends MapFragment implements OnMapReadyCallback
             // 各地点にマーカーを置く
             MarkerOptions options = new MarkerOptions();
             options.position(latLng);
+            options.title("現在地");
             options.draggable(false);
 
             // 「最新の場所」を赤く、それ以外を青いマーカーで表示する
@@ -232,20 +247,32 @@ public class LoggedMapFragment extends MapFragment implements OnMapReadyCallback
             if (i == size - 1) {
                 descriptor = BitmapDescriptorFactory.defaultMarker(
                         BitmapDescriptorFactory.HUE_RED);
+                // マーカー追加
+                mGoogleMap.addMarker(options);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                double latit = place.getLatitude();
+//                double longit = place.getLongitude();
+//                Intent intent =new Intent();
+//                intent.putExtra(EXTRA_LATIT, latit);
+//                intent.putExtra(EXTRA_LONGIT, longit);
+//                getTargetFragment().onActivityResult(getTargetRequestCode(), MainActivity.RESULT_OK, intent);
             } else {
+//                return;
                 descriptor = BitmapDescriptorFactory.defaultMarker(
                         BitmapDescriptorFactory.HUE_BLUE);
             }
 
             options.icon(descriptor);
 
-            // マーカー追加
-            mGoogleMap.addMarker(options);
+//            //全ての マーカー追加
+//            mGoogleMap.addMarker(options);
         }
 
         // 線分追加
         mGoogleMap.addPolyline(lineOptions);
     }
+
+
 
     // 表示する日付を変更する
     public void setDate(String dateString) {
@@ -254,5 +281,13 @@ public class LoggedMapFragment extends MapFragment implements OnMapReadyCallback
         // Loaderを初期化する
         getLoaderManager().restartLoader(PLACE_LOADER, getArguments(), mCallback);
     }
-
+/*
+マーカークリック時のイベント
+ */
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        // TODO Auto-generated method stub
+        marker.showInfoWindow();
+        return true;
+    }
 }

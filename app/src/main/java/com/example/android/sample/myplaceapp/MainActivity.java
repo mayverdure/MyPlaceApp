@@ -1,6 +1,7 @@
 package com.example.android.sample.myplaceapp;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,8 +10,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.android.sample.myplaceapp.camera.CameraFragment;
 import com.example.android.sample.myplaceapp.camera.CameraLegacyFragment;
@@ -60,6 +64,15 @@ public class MainActivity extends AppCompatActivity
         findViewById(R.id.CameraButton).setOnClickListener(this);
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return true;
+    }
+
+
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -75,11 +88,20 @@ public class MainActivity extends AppCompatActivity
         if (mDrawerToggle != null) {
             mDrawerToggle.onConfigurationChanged(newConfig);
         }
+
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        int id = item.getItemId();
+        if (id == R.id.action_add) {
+            Intent intent = new Intent(this, ListViewActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -100,20 +122,12 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View v) {
         // 「撮影する」ボタンが押された
         if (v.getId() == R.id.CameraButton) {
-            Fragment cameraFragment;
-
-            // カメラフラグメントを表示する
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                cameraFragment = new CameraFragment();
-            } else {
-                cameraFragment = new CameraLegacyFragment();
-            }
-
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.CameraContainer, cameraFragment)
-                    .addToBackStack(null) // バックスタックに入れることで、戻るキーで戻れる
-                    .commit();
+            Intent intent2 = new Intent(this, LogActivity.class);
+//            intent.putExtra(EXTRA_MYNAME, myname);
+            startActivity(intent2);
 
         }
     }
+
+
 }
