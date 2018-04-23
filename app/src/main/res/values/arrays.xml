@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="rarity_array">
+        <item>激レア</item>
+        <item>レア</item>
+        <item>ふつう</item>
+    </string-array>
+
+    <string-array name="type_array">
+        <item>木</item>
+        <item>花</item>
+        <item>草</item>
+        <item>実</item>
+        <item>キノコ</item>
+    </string-array>
+
+</resources>
